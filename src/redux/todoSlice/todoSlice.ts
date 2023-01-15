@@ -1,32 +1,23 @@
 import { createSlice } from '@reduxjs/toolkit'
 let id = 4
 
-interface Item {
+export interface Item {
     id:number
     title: string
     complated: boolean
 }
 
+function storage(): Item[]{
+    if (!localStorage.getItem("salam")){
+      localStorage.setItem("salam", JSON.stringify([]))
+      return [];
+    }
+    return JSON.parse(localStorage.getItem("salam") as string) as Item[];}
+
 export const todoSlice = createSlice({
   name: 'todos',
   initialState: {
-    items: [
-      {
-        id: 1,
-        title: 'HTML',
-        complated: false,
-      },
-      {
-        id: 2,
-        title: 'CSS',
-        complated: true,
-      },
-      {
-        id: 3,
-        title: 'JS',
-        complated: false,
-    } as Item
-    ],
+    items: storage(),
     activeFilter: 'all',
 },
   reducers: {
@@ -38,13 +29,14 @@ export const todoSlice = createSlice({
         
       }
     },
-    addTodo: (state, action:any) => {
+    addTodo: (state, action) => {
       state.items.push({
         id: id,
         title: action.payload,
         complated: false,
       })
       id++
+      localStorage.setItem("salam", JSON.stringify(state.items));
     },
     deleteTodo:  (state, action) => {
       const { id } = action.payload
@@ -55,12 +47,15 @@ export const todoSlice = createSlice({
           const indexOfTarget = state.items.indexOf(target)
           state.items.splice(indexOfTarget, 1)
       }
+      localStorage.setItem("salam", JSON.stringify(state.items));
     },
     changeActiveFilter: (state, action) => {
       state.activeFilter = action.payload
     },
     clearCompleted: (state) => {
       state.items = state.items.filter((item) => item.complated === false)
+    localStorage.setItem("salam", JSON.stringify(state.items));
+
     },
   },
 })
