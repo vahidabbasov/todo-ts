@@ -1,12 +1,13 @@
 import styles from './ContentFooter.module.css'
 import { useDispatch, useSelector } from 'react-redux'
 import { changeActiveFilter, clearCompleted } from '../../redux/todoSlice/todoSlice'
+import { RootState } from '../../redux/store'
 
 
 function ContentFooter() {
-    const items = useSelector((state:any) => state.todos.items)
+    const items = useSelector((state:RootState) => state.todos.items)
   const dispatch = useDispatch()
-  const activeFilter = useSelector((state:any) => state.todos.activeFilter)
+  const activeFilter = useSelector((state:RootState) => state.todos.activeFilter)
   return (
     <footer className={styles.footer}>
       <span className={styles.todo_count}>
